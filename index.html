@@ -115,6 +115,27 @@
                     </div>
                 </section>
 
+                <!-- Packaging Section -->
+                <section class="card" id="packaging-section">
+                    <div class="card-header">
+                        <h2 data-i18n="section_packaging">5. Packaging Costs</h2>
+                    </div>
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label for="mini-box-cost" data-i18n="label_mini_box">Small Box Cost (₹)</label>
+                            <input type="number" id="mini-box-cost" placeholder="0.00" step="0.01" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="large-box-cost" data-i18n="label_large_box">Large Box Cost (₹)</label>
+                            <input type="number" id="large-box-cost" placeholder="0.00" step="0.01" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="qty-in-large" data-i18n="label_qty_large">Qty in Large Box</label>
+                            <input type="number" id="qty-in-large" placeholder="1" step="1" min="1">
+                        </div>
+                    </div>
+                </section>
+
                 <div class="action-buttons">
                     <button id="btn-save-product" class="btn btn-secondary" data-i18n="btn_save_product">Save Product</button>
                     <button id="btn-clear-all" class="btn btn-danger" data-i18n="btn_clear_all">Clear All</button>
@@ -137,9 +158,17 @@
                             <span data-i18n="summary_overhead">Overhead per Unit</span>
                             <span id="overhead-display" class="value">₹0.00</span>
                         </div>
+                        <div class="summary-item">
+                            <span data-i18n="summary_packaging">Packaging Cost per Unit</span>
+                            <span id="packaging-cost-display" class="value">₹0.00</span>
+                        </div>
                         <div class="summary-item total">
                             <span data-i18n="summary_total">Total Manufacturing Cost</span>
                             <span id="total-cost-display" class="value bold">₹0.00</span>
+                        </div>
+                        <div class="summary-item highlight-box">
+                            <span data-i18n="summary_large_box">Cost per Large Box (કાર્ટૂન)</span>
+                            <span id="large-box-price-display" class="value bold highlight">₹0.00</span>
                         </div>
                         <div class="summary-item selling-price">
                             <span data-i18n="summary_selling">Suggested Selling Price</span>

@@ -252,6 +252,19 @@ td {
     color: var(--primary-color);
 }
 
+.summary-item.highlight-box {
+    background: #fffbeb;
+    border: 1px dashed #f59e0b;
+    padding: 1rem;
+    border-radius: var(--input-radius);
+    margin-top: 0.5rem;
+}
+
+.summary-item.highlight-box .value.highlight {
+    font-size: 1.25rem;
+    color: #d97706;
+}
+
 /* Chart Container */
 .chart-container {
     height: 300px;

@@ -23,13 +23,19 @@ const translations = {
         label_qty: "Monthly Production Qty",
         section_pricing: "4. Pricing Strategy",
         label_profit: "Target Profit Percentage (%)",
+        section_packaging: "5. Packaging Costs",
+        label_mini_box: "Small Box (Khokhu) Cost (₹)",
+        label_large_box: "Large Box (Cartoon) Cost (₹)",
+        label_qty_large: "Mini Boxes per Large Box",
         btn_save_product: "Save Product",
         btn_clear_all: "Clear All",
         btn_backup: "Download Backup",
         section_summary: "Financial Summary",
         summary_raw: "Raw Material Cost",
         summary_overhead: "Overhead per Unit",
+        summary_packaging: "Packaging Cost per Unit",
         summary_total: "Total Manufacturing Cost",
+        summary_large_box: "Cost per Large Box (Cartoon)",
         summary_selling: "Suggested Selling Price",
         section_distribution: "Cost Distribution",
         section_saved: "Saved Products",
@@ -64,13 +70,19 @@ const translations = {
         label_qty: "માસિક ઉત્પાદન જથ્થો",
         section_pricing: "૪. કિંમત નિર્ધારણ વ્યૂહરચના",
         label_profit: "લક્ષિત નફો ટકાવારી (%)",
+        section_packaging: "૫. પેકેજિંગ ખર્ચ",
+        label_mini_box: "નાનું ખોખું (ખોખું) કિંમત (₹)",
+        label_large_box: "મોટું કાર્ટૂન (કાર્ટૂન) કિંમત (₹)",
+        label_qty_large: "એક કાર્ટૂનમાં કેટલા ખોખા?",
         btn_save_product: "ઉત્પાદન સાચવો",
         btn_clear_all: "બધું સાફ કરો",
         btn_backup: "બેકઅપ ડાઉનલોડ કરો",
         section_summary: "નાણાકીય સારાંશ",
         summary_raw: "કાચા માલનો ખર્ચ",
         summary_overhead: "એકમ દીઠ ઓવરહેડ",
+        summary_packaging: "એકમ દીઠ પેકેજિંગ ખર્ચ",
         summary_total: "કુલ ઉત્પાદન ખર્ચ",
+        summary_large_box: "મોટા કાર્ટૂન દીઠ કિંમત",
         summary_selling: "સુચવેલ વેચાણ કિંમત",
         section_distribution: "ખર્ચ વિતરણ",
         section_saved: "સાચવેલા ઉત્પાદનો",
@@ -99,6 +111,11 @@ let state = {
         rent: 0,
         productionQty: 1
     },
+    packaging: {
+        miniBoxCost: 0,
+        largeBoxCost: 0,
+        qtyInLarge: 1
+    },
     profitPercent: 20,
     currentLanguage: 'en',
     editingPartId: null
@@ -121,13 +138,18 @@ const elements = {
     electricityCost: document.getElementById('electricity-cost'),
     rentCost: document.getElementById('rent-cost'),
     productionQty: document.getElementById('production-qty'),
+    miniBoxCost: document.getElementById('mini-box-cost'),
+    largeBoxCost: document.getElementById('large-box-cost'),
+    qtyInLarge: document.getElementById('qty-in-large'),
     profitPercent: document.getElementById('profit-percent'),
     btnSaveProduct: document.getElementById('btn-save-product'),
     btnClearAll: document.getElementById('btn-clear-all'),
     btnDownloadBackup: document.getElementById('btn-download-backup'),
     rawCostDisplay: document.getElementById('raw-cost-display'),
     overheadDisplay: document.getElementById('overhead-display'),
+    packagingCostDisplay: document.getElementById('packaging-cost-display'),
     totalCostDisplay: document.getElementById('total-cost-display'),
+    largeBoxPriceDisplay: document.getElementById('large-box-price-display'),
     sellingPriceDisplay: document.getElementById('selling-price-display'),
     savedProductsList: document.getElementById('saved-products-list'),
     langButtons: document.querySelectorAll('.btn-lang'),
@@ -157,6 +179,12 @@ function setupEventListeners() {
     elements.electricityCost.addEventListener('input', updateExpenses);
     elements.rentCost.addEventListener('input', updateExpenses);
     elements.productionQty.addEventListener('input', updateExpenses);
+    
+    // Packaging Inputs
+    elements.miniBoxCost.addEventListener('input', updatePackaging);
+    elements.largeBoxCost.addEventListener('input', updatePackaging);
+    elements.qtyInLarge.addEventListener('input', updatePackaging);
+
     elements.profitPercent.addEventListener('input', (e) => {
         state.profitPercent = parseFloat(e.target.value) || 0;
         calculateAndRender();
@@ -183,6 +211,15 @@ function setupEventListeners() {
             changeLanguage(lang);
         });
     });
+}
+
+function updatePackaging() {
+    state.packaging = {
+        miniBoxCost: parseFloat(elements.miniBoxCost.value) || 0,
+        largeBoxCost: parseFloat(elements.largeBoxCost.value) || 0,
+        qtyInLarge: parseFloat(elements.qtyInLarge.value) || 1
+    };
+    calculateAndRender();
 }
 
 /**
@@ -325,12 +362,21 @@ function calculateAndRender() {
     const rawCost = state.parts.reduce((sum, part) => sum + part.cost, 0);
     const monthlyOverhead = state.expenses.labor + state.expenses.electricity + state.expenses.rent;
     const overheadPerUnit = monthlyOverhead / (state.expenses.productionQty || 1);
-    const totalCost = rawCost + overheadPerUnit;
+    
+    // Packaging Logic
+    const packagingPerUnit = state.packaging.miniBoxCost + (state.packaging.largeBoxCost / (state.packaging.qtyInLarge || 1));
+    
+    const totalCost = rawCost + overheadPerUnit + packagingPerUnit;
     const sellingPrice = totalCost + (totalCost * (state.profitPercent / 100));
+    
+    // Price per Large Box (1 Cartoon)
+    const largeBoxPrice = sellingPrice * state.packaging.qtyInLarge;
 
     elements.rawCostDisplay.textContent = formatCurrency(rawCost);
     elements.overheadDisplay.textContent = formatCurrency(overheadPerUnit);
+    elements.packagingCostDisplay.textContent = formatCurrency(packagingPerUnit);
     elements.totalCostDisplay.textContent = formatCurrency(totalCost);
+    elements.largeBoxPriceDisplay.textContent = formatCurrency(largeBoxPrice);
     elements.sellingPriceDisplay.textContent = formatCurrency(sellingPrice);
 
     renderPartsTable();
@@ -363,6 +409,11 @@ function updateUI() {
     elements.electricityCost.value = state.expenses.electricity || '';
     elements.rentCost.value = state.expenses.rent || '';
     elements.productionQty.value = state.expenses.productionQty || 1;
+    
+    elements.miniBoxCost.value = state.packaging.miniBoxCost || '';
+    elements.largeBoxCost.value = state.packaging.largeBoxCost || '';
+    elements.qtyInLarge.value = state.packaging.qtyInLarge || 1;
+    
     elements.profitPercent.value = state.profitPercent;
     
     calculateAndRender();
@@ -468,8 +519,10 @@ function generateBackup(isManual = true) {
     const rawCost = state.parts.reduce((sum, part) => sum + part.cost, 0);
     const monthlyOverhead = state.expenses.labor + state.expenses.electricity + state.expenses.rent;
     const overheadPerUnit = monthlyOverhead / (state.expenses.productionQty || 1);
-    const totalCost = rawCost + overheadPerUnit;
+    const packagingPerUnit = state.packaging.miniBoxCost + (state.packaging.largeBoxCost / (state.packaging.qtyInLarge || 1));
+    const totalCost = rawCost + overheadPerUnit + packagingPerUnit;
     const sellingPrice = totalCost + (totalCost * (state.profitPercent / 100));
+    const largeBoxPrice = sellingPrice * state.packaging.qtyInLarge;
 
     let content = `--- MANUFACTURING COST REPORT ---\n`;
     content += `Product Name: ${state.productName}\n`;
@@ -480,24 +533,33 @@ function generateBackup(isManual = true) {
         content += `- ${p.name}: ₹${p.cost.toFixed(2)} (${p.weight}g @ ₹${p.price}/kg)\n`;
     });
     
-    content += `\nOVERHEADS:\n`;
+    content += `\nMONTHLY OVERHEADS:\n`;
     content += `- Labor: ₹${state.expenses.labor}\n`;
     content += `- Electricity: ₹${state.expenses.electricity}\n`;
     content += `- Rent: ₹${state.expenses.rent}\n`;
-    content += `- Monthly Quantity: ${state.expenses.productionQty}\n`;
+    content += `- Monthly Production Qty: ${state.expenses.productionQty}\n`;
     
-    content += `\nSUMMARY:\n`;
+    content += `\nPACKAGING DETAILS:\n`;
+    content += `- Small Box (Khokhu): ₹${state.packaging.miniBoxCost}\n`;
+    content += `- Large Box (Cartoon): ₹${state.packaging.largeBoxCost}\n`;
+    content += `- Qty per Cartoon: ${state.packaging.qtyInLarge}\n`;
+
+    content += `\nSUMMARY per UNIT:\n`;
     content += `Raw Material Cost: ₹${rawCost.toFixed(2)}\n`;
     content += `Overhead Per Unit: ₹${overheadPerUnit.toFixed(2)}\n`;
+    content += `Packaging Cost: ₹${packagingPerUnit.toFixed(2)}\n`;
     content += `TOTAL MANUFACTURING COST: ₹${totalCost.toFixed(2)}\n`;
     content += `Target Profit: ${state.profitPercent}%\n`;
     content += `SUGGESTED SELLING PRICE: ₹${sellingPrice.toFixed(2)}\n`;
+    
+    content += `\nSUMMARY per LARGE BOX (CARTOON):\n`;
+    content += `TOTAL SELLING PRICE per CARTOON: ₹${largeBoxPrice.toFixed(2)}\n`;
 
     const blob = new Blob([content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${state.productName.replace(/\s+/g, '_')}_Backup.txt`;
+    a.download = `${state.productName.replace(/\s+/g, '_')}_Cost_Report.txt`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
