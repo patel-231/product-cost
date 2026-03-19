@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,11 +14,18 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="app-container">
         <header class="app-header">
-            <h1>Manufacturing Cost Calculator</h1>
-            <p>Optimize your production costs and pricing strategy.</p>
+            <div class="header-top">
+                <h1 data-i18n="app_title">Manufacturing Cost Calculator</h1>
+                <div class="lang-selector">
+                    <button class="btn-lang active" data-lang="en">English</button>
+                    <button class="btn-lang" data-lang="gu">ગુજરાતી</button>
+                </div>
+            </div>
+            <p data-i18n="app_subtitle">Optimize your production costs and pricing strategy.</p>
         </header>
 
         <main class="app-grid">
@@ -26,10 +34,10 @@
                 <!-- Product Name Section -->
                 <section class="card" id="product-name-section">
                     <div class="card-header">
-                        <h2>1. Product Details</h2>
+                        <h2 data-i18n="section_product_details">1. Product Details</h2>
                     </div>
                     <div class="input-group">
-                        <label for="product-name">Product Name</label>
+                        <label for="product-name" data-i18n="label_product_name">Product Name</label>
                         <input type="text" id="product-name" placeholder="e.g., Ceramic Mug" autocomplete="off">
                     </div>
                 </section>
@@ -37,31 +45,31 @@
                 <!-- Add Parts Section -->
                 <section class="card" id="add-parts-section">
                     <div class="card-header">
-                        <h2>2. Bill of Materials (Parts)</h2>
+                        <h2 data-i18n="section_bom">2. Bill of Materials (Parts)</h2>
                     </div>
                     <div class="form-grid">
                         <div class="input-group">
-                            <label for="part-name">Part Name</label>
+                            <label for="part-name" data-i18n="label_part_name">Part Name</label>
                             <input type="text" id="part-name" placeholder="Part name">
                         </div>
                         <div class="input-group">
-                            <label for="price-kg">Price per kg (₹)</label>
+                            <label for="price-kg" data-i18n="label_price_kg">Price per kg (₹)</label>
                             <input type="number" id="price-kg" placeholder="0.00" step="0.01" min="0">
                         </div>
                         <div class="input-group">
-                            <label for="weight-g">Weight (grams)</label>
+                            <label for="weight-g" data-i18n="label_weight_g">Weight (grams)</label>
                             <input type="number" id="weight-g" placeholder="0" step="1" min="0">
                         </div>
                     </div>
-                    <button id="btn-add-part" class="btn btn-primary">Add Part</button>
+                    <button id="btn-add-part" class="btn btn-primary" data-i18n="btn_add_part">Add Part</button>
                     
                     <div class="parts-list-container">
                         <table id="parts-table">
                             <thead>
                                 <tr>
-                                    <th>Part Name</th>
-                                    <th>Cost (₹)</th>
-                                    <th>Action</th>
+                                    <th data-i18n="th_part_name">Part Name</th>
+                                    <th data-i18n="th_cost">Cost (₹)</th>
+                                    <th data-i18n="th_action">Action</th>
                                 </tr>
                             </thead>
                             <tbody id="parts-body">
@@ -74,23 +82,23 @@
                 <!-- Expenses Section -->
                 <section class="card" id="expenses-section">
                     <div class="card-header">
-                        <h2>3. Monthly Expenses (Overheads)</h2>
+                        <h2 data-i18n="section_expenses">3. Monthly Expenses (Overheads)</h2>
                     </div>
                     <div class="form-grid">
                         <div class="input-group">
-                            <label for="labor-cost">Labor Cost (₹)</label>
+                            <label for="labor-cost" data-i18n="label_labor">Labor Cost (₹)</label>
                             <input type="number" id="labor-cost" placeholder="0.00" step="0.01" min="0">
                         </div>
                         <div class="input-group">
-                            <label for="electricity-cost">Electricity Cost (₹)</label>
+                            <label for="electricity-cost" data-i18n="label_electricity">Electricity Cost (₹)</label>
                             <input type="number" id="electricity-cost" placeholder="0.00" step="0.01" min="0">
                         </div>
                         <div class="input-group">
-                            <label for="rent-cost">Rent (₹)</label>
+                            <label for="rent-cost" data-i18n="label_rent">Rent (₹)</label>
                             <input type="number" id="rent-cost" placeholder="0.00" step="0.01" min="0">
                         </div>
                         <div class="input-group">
-                            <label for="production-qty">Monthly Production Qty</label>
+                            <label for="production-qty" data-i18n="label_qty">Monthly Production Qty</label>
                             <input type="number" id="production-qty" placeholder="1" step="1" min="1">
                         </div>
                     </div>
@@ -99,41 +107,42 @@
                 <!-- Profit Section -->
                 <section class="card" id="profit-section">
                     <div class="card-header">
-                        <h2>4. Pricing Strategy</h2>
+                        <h2 data-i18n="section_pricing">4. Pricing Strategy</h2>
                     </div>
                     <div class="input-group">
-                        <label for="profit-percent">Target Profit Percentage (%)</label>
+                        <label for="profit-percent" data-i18n="label_profit">Target Profit Percentage (%)</label>
                         <input type="number" id="profit-percent" placeholder="20" step="0.5" min="0" max="100">
                     </div>
                 </section>
 
                 <div class="action-buttons">
-                    <button id="btn-save-product" class="btn btn-secondary">Save Product</button>
-                    <button id="btn-clear-all" class="btn btn-danger">Clear All</button>
+                    <button id="btn-save-product" class="btn btn-secondary" data-i18n="btn_save_product">Save Product</button>
+                    <button id="btn-clear-all" class="btn btn-danger" data-i18n="btn_clear_all">Clear All</button>
                 </div>
+                <button id="btn-download-backup" class="btn btn-outline" style="border: 1px solid var(--primary-color); color: var(--primary-color); background: white;" data-i18n="btn_backup">Download Backup</button>
             </div>
 
             <!-- Right Column: Results & Charts -->
             <div class="result-column">
                 <section class="card result-card" id="summary-section">
                     <div class="card-header">
-                        <h2>Financial Summary</h2>
+                        <h2 data-i18n="section_summary">Financial Summary</h2>
                     </div>
                     <div class="summary-grid">
                         <div class="summary-item">
-                            <span>Raw Material Cost</span>
+                            <span data-i18n="summary_raw">Raw Material Cost</span>
                             <span id="raw-cost-display" class="value">₹0.00</span>
                         </div>
                         <div class="summary-item">
-                            <span>Overhead per Unit</span>
+                            <span data-i18n="summary_overhead">Overhead per Unit</span>
                             <span id="overhead-display" class="value">₹0.00</span>
                         </div>
                         <div class="summary-item total">
-                            <span>Total Manufacturing Cost</span>
+                            <span data-i18n="summary_total">Total Manufacturing Cost</span>
                             <span id="total-cost-display" class="value bold">₹0.00</span>
                         </div>
                         <div class="summary-item selling-price">
-                            <span>Suggested Selling Price</span>
+                            <span data-i18n="summary_selling">Suggested Selling Price</span>
                             <span id="selling-price-display" class="value bold highlight">₹0.00</span>
                         </div>
                     </div>
@@ -141,7 +150,7 @@
 
                 <section class="card chart-card">
                     <div class="card-header">
-                        <h2>Cost Distribution</h2>
+                        <h2 data-i18n="section_distribution">Cost Distribution</h2>
                     </div>
                     <div class="chart-container">
                         <canvas id="costChart"></canvas>
@@ -150,7 +159,7 @@
 
                 <section class="card" id="saved-products-section">
                     <div class="card-header">
-                        <h2>Saved Products</h2>
+                        <h2 data-i18n="section_saved">Saved Products</h2>
                     </div>
                     <ul id="saved-products-list" class="list-group">
                         <!-- Saved products will appear here -->
@@ -160,10 +169,11 @@
         </main>
 
         <footer class="app-footer">
-            <p>&copy; 2026 Manufacturing Cost Calculator. Built for Efficiency.</p>
+            <p data-i18n="footer">&copy; 2026 Manufacturing Cost Calculator. Built for Efficiency.</p>
         </footer>
     </div>
 
     <script src="app.js"></script>
 </body>
+
 </html>

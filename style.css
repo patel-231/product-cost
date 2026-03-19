@@ -288,6 +288,67 @@ td {
     gap: 0.5rem;
 }
 
+/* Language Selector */
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.lang-selector {
+    display: flex;
+    gap: 0.5rem;
+    background: #e2e8f0;
+    padding: 0.25rem;
+    border-radius: 20px;
+}
+
+.btn-lang {
+    padding: 0.4rem 1rem;
+    border-radius: 15px;
+    border: none;
+    background: transparent;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    color: var(--secondary-color);
+}
+
+.btn-lang.active {
+    background: white;
+    color: var(--primary-color);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.item-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.btn-edit {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.btn-outline {
+    background: white;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+.btn-outline:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
 /* Responsive Overrides */
 @media (max-width: 640px) {
     .app-container {
@@ -298,6 +359,11 @@ td {
         font-size: 1.75rem;
     }
     
+    .header-top {
+        justify-content: center;
+        text-align: center;
+    }
+
     .action-buttons {
         flex-direction: column;
     }
